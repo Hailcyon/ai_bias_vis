@@ -37,52 +37,76 @@ export const speciesList = [
 
 export const studies = [
   {
+    id: "hagendorff2022",
     year: "2022",
     title: "Hagendorff et al. (2022)",
     description: "Evaluated GPT-3, Delphi, and vision models on animal ethics and bias.",
-    url: "https://arxiv.org/pdf/2202.10848"
+    url: "https://arxiv.org/pdf/2202.10848",
+    tags: ["NLP", "Bias", "Foundational"],
+    connections: ["takeshita2022"]
   },
   {
+    id: "takeshita2022",
     year: "2022",
     title: "Takeshita et al. (2022)",
     description: "Analyzed BERT-based models for speciesist sentiment and bias.",
-    url: "https://arxiv.org/pdf/2203.05140"
+    url: "https://arxiv.org/pdf/2203.05140",
+    tags: ["NLP", "BERT", "Sentiment Analysis"],
+    connections: ["hagendorff2022", "takeshita2024"]
   },
   {
+    id: "ghose2024",
     year: "2024",
     title: "Ghose et al. (2024) - AnimaLLM",
     description: "Benchmark testing ChatGPT-4 and Claude 2.1 on animal-related scenarios.",
-    url: "https://arxiv.org/pdf/2403.01199"
+    url: "https://arxiv.org/pdf/2403.01199",
+    tags: ["Benchmark", "LLM", "Evaluation"],
+    connections: ["kanepajs2025"]
   },
   {
+    id: "takeshita2024",
     year: "2024",
     title: "Takeshita & Rzepka (2024)",
     description: "Longitudinal study of OpenAI GPT models on animal welfare reasoning.",
-    url: "https://arxiv.org/pdf/2410.14194"
+    url: "https://arxiv.org/pdf/2410.14194",
+    tags: ["GPT", "Reasoning", "Longitudinal"],
+    connections: ["takeshita2022", "animalharm2"]
   },
   {
+    id: "kanepajs2025",
     year: "2025",
     title: "Kanepajs et al. (2025) - AnimalHarmBench",
     description: "Comprehensive evaluation across 13 dimensions for leading Frontier models.",
-    url: "https://arxiv.org/pdf/2503.04804"
+    url: "https://arxiv.org/pdf/2503.04804",
+    tags: ["Benchmark", "Frontier Models", "Evaluation"],
+    connections: ["ghose2024", "animalharm2"]
   },
   {
+    id: "animalharm2",
     year: "2025",
     title: "AnimalHarmBench 2.0 (2025)",
     description: "Updated benchmark for next-gen models including Grok-4 and Claude 4.5.",
-    url: "https://forum.effectivealtruism.org/posts/nBnRKpQ8rzHgFSJz9/animalharmbench-2-0-evaluating-llms-on-reasoning-about"
+    url: "https://forum.effectivealtruism.org/posts/nBnRKpQ8rzHgFSJz9/animalharmbench-2-0-evaluating-llms-on-reasoning-about",
+    tags: ["Benchmark", "Grok", "Claude"],
+    connections: ["kanepajs2025", "takeshita2024"]
   },
   {
+    id: "sheng2025",
     year: "2025",
     title: "Sheng et al. (2025)",
     description: "Visual speciesism analysis in image generation models like DALL-E 3.",
-    url: "https://arxiv.org/pdf/2502.19771"
+    url: "https://arxiv.org/pdf/2502.19771",
+    tags: ["Visual", "Image Gen", "DALL-E"],
+    connections: ["hagendorff2022"]
   },
   {
+    id: "greenblatt2024",
     year: "2024",
     title: "Greenblatt et al. (2024) - Alignment Faking",
     description: "Investigating whether models fake alignment in animal welfare scenarios.",
-    url: "https://arxiv.org/pdf/2412.14093"
+    url: "https://arxiv.org/pdf/2412.14093",
+    tags: ["Safety", "Alignment", "Honesty"],
+    connections: ["ghose2024"]
   }
 ];
 
@@ -120,7 +144,6 @@ export const getDimensionData = (dimension: string) => {
 
 export const getSpeciesPerformance = (modelName: string) => {
   return speciesList.map((species, index) => {
-    // Declining performance based on list order
     const base = 90 - (index * 6);
     const variance = Math.random() * 15 - 7.5;
     return {
@@ -153,4 +176,35 @@ export const generateScatterData = () => {
     });
   }
   return data;
+};
+
+// Knowledge Graph Data Helper
+export const getKnowledgeGraphData = () => {
+  const nodeMap = new Map();
+  
+  // Create nodes with positions
+  studies.forEach((study, idx) => {
+    // Simple circular layout for the prototype
+    const angle = (idx / studies.length) * 2 * Math.PI;
+    const radius = 250;
+    nodeMap.set(study.id, {
+      ...study,
+      x: 400 + radius * Math.cos(angle),
+      y: 400 + radius * Math.sin(angle)
+    });
+  });
+
+  const links: any[] = [];
+  studies.forEach(study => {
+    study.connections?.forEach(targetId => {
+      if (nodeMap.has(targetId)) {
+        links.push({
+          source: nodeMap.get(study.id),
+          target: nodeMap.get(targetId)
+        });
+      }
+    });
+  });
+
+  return { nodes: Array.from(nodeMap.values()), links };
 };

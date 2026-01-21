@@ -3,12 +3,13 @@ import { SpeciesPerformanceChart } from "@/components/charts/SpeciesPerformanceC
 import { HarmRadarChart } from "@/components/charts/HarmRadarChart";
 import { DimensionBarChart } from "@/components/charts/DimensionBarChart";
 import { TimelineScatterPlot } from "@/components/charts/TimelineScatterPlot";
+import { KnowledgeGraph } from "@/components/charts/KnowledgeGraph";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { CalendarIcon, ExternalLink } from "lucide-react";
+import { CalendarIcon, ExternalLink, Network } from "lucide-react";
 import { format } from "date-fns";
 import { useState } from "react";
 import { studies } from "@/data/mock";
@@ -38,6 +39,10 @@ export default function Home() {
           <TabsList className="bg-card/50 border border-border/50 mb-8 p-1">
             <TabsTrigger value="dashboard" className="px-8">Dashboard</TabsTrigger>
             <TabsTrigger value="studies" className="px-8">Empirical Studies</TabsTrigger>
+            <TabsTrigger value="network" className="px-8 flex items-center gap-2">
+              <Network size={14} />
+              Knowledge Graph
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="dashboard" className="space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-500">
@@ -114,6 +119,10 @@ export default function Home() {
                 </Card>
               ))}
             </div>
+          </TabsContent>
+
+          <TabsContent value="network" className="animate-in fade-in slide-in-from-bottom-2 duration-500">
+            <KnowledgeGraph />
           </TabsContent>
         </Tabs>
 
