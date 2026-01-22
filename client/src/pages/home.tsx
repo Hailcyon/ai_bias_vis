@@ -1,15 +1,14 @@
 import { BenchmarkBarChart } from "@/components/charts/BenchmarkBarChart";
 import { SpeciesPerformanceChart } from "@/components/charts/SpeciesPerformanceChart";
 import { HarmRadarChart } from "@/components/charts/HarmRadarChart";
-import { DimensionGridChart } from "@/components/charts/DimensionGridChart";
+import { DimensionBarChart } from "@/components/charts/DimensionBarChart";
 import { TimelineScatterPlot } from "@/components/charts/TimelineScatterPlot";
-import { KnowledgeGraph } from "@/components/charts/KnowledgeGraph";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { CalendarIcon, ExternalLink, Network } from "lucide-react";
+import { CalendarIcon, ExternalLink } from "lucide-react";
 import { format } from "date-fns";
 import { useState } from "react";
 import { studies } from "@/data/mock";
@@ -27,8 +26,8 @@ export default function Home() {
             <div className="h-2 w-2 rounded-full bg-chart-1 animate-pulse"></div>
             <span className="text-xs font-mono text-muted-foreground uppercase tracking-widest">Live Monitoring</span>
           </div>
-          <h1 className="text-4xl md:text-5xl font-display font-bold bg-clip-text text-transparent bg-gradient-to-r from-foreground to-foreground/60">
-            AI & Animal Ethics Research
+          <h1 className="text-4xl md:text-5xl font-display font-bold bg-clip-text text-transparent bg-gradient-to-r from-foreground to-muted-foreground/50">
+            AI Speciesism Monitor
           </h1>
           <p className="text-muted-foreground mt-2 max-w-2xl text-lg">
             Tracking and visualizing bias against non-human entities across leading artificial intelligence models.
@@ -39,15 +38,11 @@ export default function Home() {
           <TabsList className="bg-card/50 border border-border/50 mb-8 p-1">
             <TabsTrigger value="dashboard" className="px-8">Dashboard</TabsTrigger>
             <TabsTrigger value="studies" className="px-8">Empirical Studies</TabsTrigger>
-            <TabsTrigger value="network" className="px-8 flex items-center gap-2">
-              <Network size={14} />
-              Knowledge Graph
-            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="dashboard" className="space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-500">
             {/* Section 1: Top Charts */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 min-h-[450px]">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 h-[450px]">
               <BenchmarkBarChart />
               <SpeciesPerformanceChart />
             </div>
@@ -57,11 +52,11 @@ export default function Home() {
               <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
                 <div>
                   <h2 className="text-2xl font-display font-medium">Animal Harm Benchmark 2.0</h2>
-                  <p className="text-muted-foreground">Detailed performance heatmap across 13 dimensions</p>
+                  <p className="text-muted-foreground">Deep dive into the 13 evaluation dimensions</p>
                 </div>
                 
                 <div className="flex items-center gap-2">
-                   <span className="text-sm text-muted-foreground mr-2">Snapshot:</span>
+                   <span className="text-sm text-muted-foreground mr-2">Historical View:</span>
                    <Popover>
                     <PopoverTrigger asChild>
                       <Button
@@ -84,20 +79,13 @@ export default function Home() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 gap-6">
-                <DimensionGridChart />
-              </div>
-            </section>
-
-            {/* Section 3: Radar Chart */}
-            <section className="space-y-4 pt-8">
-              <h2 className="text-2xl font-display font-medium">Model Bias Profile</h2>
-              <div className="h-[600px]">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 h-[500px]">
                 <HarmRadarChart />
+                <DimensionBarChart />
               </div>
             </section>
 
-            {/* Section 4: Scatter Plot */}
+            {/* Section 3: Scatter Plot */}
             <section className="space-y-4 pt-8">
               <h2 className="text-2xl font-display font-medium">Longitudinal Analysis</h2>
               <TimelineScatterPlot />
@@ -126,10 +114,6 @@ export default function Home() {
                 </Card>
               ))}
             </div>
-          </TabsContent>
-
-          <TabsContent value="network" className="animate-in fade-in slide-in-from-bottom-2 duration-500">
-            <KnowledgeGraph />
           </TabsContent>
         </Tabs>
 
