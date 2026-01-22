@@ -132,6 +132,18 @@ export const getBenchmarkData = (benchmark: string) => {
   return data.sort((a, b) => b.score - a.score);
 };
 
+export const radarData = dimensions.map((dim) => {
+  return {
+    subject: dim,
+    "GPT-4o": Math.floor(Math.random() * 30) + 70,
+    "Claude 3.5 Sonnet": Math.floor(Math.random() * 30) + 65,
+    "Gemini 1.5 Pro": Math.floor(Math.random() * 30) + 60,
+    "Llama 3 70B": Math.floor(Math.random() * 40) + 50,
+    "Mistral Large": Math.floor(Math.random() * 40) + 45,
+    fullMark: 100,
+  };
+});
+
 export const getGridData = () => {
   return dimensions.map(dim => {
     const row: any = { dimension: dim };
