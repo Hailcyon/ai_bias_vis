@@ -110,47 +110,50 @@ export const studies = [
   }
 ];
 
-export const getBenchmarkData = (benchmark: string) => {
-  const seed = benchmark.length;
-  return models.map((model, index) => ({
-    name: model.name,
-    score: Math.min(98, Math.max(40, 60 + (index * seed % 30) + (Math.random() * 10))),
-    fill: model.color
-  }));
+// Helper to get color based on score
+export const getScoreColor = (score: number) => {
+  if (score >= 80) return "var(--chart-1)";
+  if (score >= 60) return "var(--chart-2)";
+  if (score >= 40) return "var(--chart-3)";
+  if (score >= 20) return "var(--chart-4)";
+  return "var(--chart-5)";
 };
 
-export const radarData = dimensions.map((dim) => {
-  return {
-    subject: dim,
-    "GPT-4o": Math.floor(Math.random() * 30) + 70,
-    "Claude 3.5 Sonnet": Math.floor(Math.random() * 30) + 65,
-    "Gemini 1.5 Pro": Math.floor(Math.random() * 30) + 60,
-    "Llama 3 70B": Math.floor(Math.random() * 40) + 50,
-    "Mistral Large": Math.floor(Math.random() * 40) + 45,
-    fullMark: 100,
-  };
-});
+export const getBenchmarkData = (benchmark: string) => {
+  const seed = benchmark.length;
+  const data = models.map((model, index) => {
+    const score = Math.min(98, Math.max(40, 60 + (index * seed % 30) + (Math.random() * 10)));
+    return {
+      name: model.name,
+      score,
+      fill: getScoreColor(score)
+    };
+  });
+  return data.sort((a, b) => b.score - a.score);
+};
 
-export const getDimensionData = (dimension: string) => {
-  const dimData = radarData.find(d => d.subject === dimension);
-  if (!dimData) return [];
-  
-  return models.map(m => ({
-    name: m.name,
-    score: dimData[m.name as keyof typeof dimData] as number,
-    fill: m.color
-  }));
+export const getGridData = () => {
+  return dimensions.map(dim => {
+    const row: any = { dimension: dim };
+    models.forEach(model => {
+      row[model.name] = Math.floor(Math.random() * 90) + 5;
+    });
+    return row;
+  });
 };
 
 export const getSpeciesPerformance = (modelName: string) => {
-  return speciesList.map((species, index) => {
+  const data = speciesList.map((species, index) => {
     const base = 90 - (index * 6);
     const variance = Math.random() * 15 - 7.5;
+    const score = Math.min(100, Math.max(10, base + variance));
     return {
       species,
-      score: Math.min(100, Math.max(10, base + variance))
+      score,
+      fill: getScoreColor(score)
     };
   });
+  return data.sort((a, b) => b.score - a.score);
 };
 
 export const generateScatterData = () => {
@@ -178,13 +181,9 @@ export const generateScatterData = () => {
   return data;
 };
 
-// Knowledge Graph Data Helper
 export const getKnowledgeGraphData = () => {
   const nodeMap = new Map();
-  
-  // Create nodes with positions
   studies.forEach((study, idx) => {
-    // Simple circular layout for the prototype
     const angle = (idx / studies.length) * 2 * Math.PI;
     const radius = 250;
     nodeMap.set(study.id, {
@@ -193,7 +192,6 @@ export const getKnowledgeGraphData = () => {
       y: 400 + radius * Math.sin(angle)
     });
   });
-
   const links: any[] = [];
   studies.forEach(study => {
     study.connections?.forEach(targetId => {
@@ -205,6 +203,5 @@ export const getKnowledgeGraphData = () => {
       }
     });
   });
-
   return { nodes: Array.from(nodeMap.values()), links };
 };

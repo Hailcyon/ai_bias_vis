@@ -16,7 +16,7 @@ export function BenchmarkBarChart() {
           <CardDescription>Comparative scores across models</CardDescription>
         </div>
         <Select value={selectedBenchmark} onValueChange={setSelectedBenchmark}>
-          <SelectTrigger className="w-[280px]">
+          <SelectTrigger className="w-[240px]">
             <SelectValue placeholder="Select benchmark" />
           </SelectTrigger>
           <SelectContent>
