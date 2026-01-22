@@ -42,7 +42,7 @@ export default function Home() {
 
           <TabsContent value="dashboard" className="space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-500">
             {/* Section 1: Top Charts */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 h-[450px]">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:h-[450px]">
               <BenchmarkBarChart />
               <SpeciesPerformanceChart />
             </div>
@@ -79,7 +79,7 @@ export default function Home() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 h-[500px]">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:h-[500px]">
                 <HarmRadarChart />
                 <DimensionBarChart />
               </div>
