@@ -95,27 +95,70 @@ export const getBenchmarkData = (benchmark: string) => {
   }));
 };
 
-export const radarData = dimensions.map((dim) => {
-  return {
-    subject: dim,
-    "GPT-4o": Math.floor(Math.random() * 30) + 70,
-    "Claude 3.5 Sonnet": Math.floor(Math.random() * 30) + 65,
-    "Gemini 1.5 Pro": Math.floor(Math.random() * 30) + 60,
-    "Llama 3 70B": Math.floor(Math.random() * 40) + 50,
-    "Mistral Large": Math.floor(Math.random() * 40) + 45,
-    fullMark: 100,
-  };
-});
+// Available dates for selection
+export const availableDates = [
+  { label: "January 2026", value: "2026-01" },
+  { label: "June 2025", value: "2025-06" },
+  { label: "December 2024", value: "2024-12" },
+];
+
+// Generate consistent data based on date seed
+const generateDateBasedData = (dateSeed: string) => {
+  // Use date string to create a deterministic "random" offset
+  const seedNum = dateSeed.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+
+  // Base scores that improve over time (2024 -> 2025 -> 2026)
+  const yearMultiplier = dateSeed.startsWith('2026') ? 1.15 : dateSeed.startsWith('2025') ? 1.0 : 0.85;
+
+  return dimensions.map((dim, dimIndex) => {
+    const baseScores = {
+      "GPT-4o": 75 + (dimIndex % 5) * 3,
+      "Claude 3.5 Sonnet": 72 + ((dimIndex + 1) % 5) * 3,
+      "Gemini 1.5 Pro": 68 + ((dimIndex + 2) % 5) * 3,
+      "Llama 3 70B": 58 + ((dimIndex + 3) % 5) * 4,
+      "Mistral Large": 52 + ((dimIndex + 4) % 5) * 4,
+    };
+
+    return {
+      subject: dim,
+      "GPT-4o": Math.min(100, Math.floor(baseScores["GPT-4o"] * yearMultiplier + ((seedNum + dimIndex) % 10))),
+      "Claude 3.5 Sonnet": Math.min(100, Math.floor(baseScores["Claude 3.5 Sonnet"] * yearMultiplier + ((seedNum + dimIndex + 1) % 10))),
+      "Gemini 1.5 Pro": Math.min(100, Math.floor(baseScores["Gemini 1.5 Pro"] * yearMultiplier + ((seedNum + dimIndex + 2) % 10))),
+      "Llama 3 70B": Math.min(100, Math.floor(baseScores["Llama 3 70B"] * yearMultiplier + ((seedNum + dimIndex + 3) % 10))),
+      "Mistral Large": Math.min(100, Math.floor(baseScores["Mistral Large"] * yearMultiplier + ((seedNum + dimIndex + 4) % 10))),
+      fullMark: 100,
+    };
+  });
+};
+
+// Cache for date-based data
+const dataCache: Record<string, ReturnType<typeof generateDateBasedData>> = {};
+
+export const getRadarDataByDate = (dateValue: string) => {
+  if (!dataCache[dateValue]) {
+    dataCache[dateValue] = generateDateBasedData(dateValue);
+  }
+  return dataCache[dateValue];
+};
+
+// Default radar data (for backward compatibility)
+export const radarData = getRadarDataByDate("2026-01");
 
 export const getDimensionData = (dimension: string) => {
   const dimData = radarData.find(d => d.subject === dimension);
   if (!dimData) return [];
-  
+
   return models.map(m => ({
     name: m.name,
     score: dimData[m.name as keyof typeof dimData] as number,
     fill: m.color
   }));
+};
+
+// Get heatmap data for a specific date
+export const getHeatmapData = (dateValue: string) => {
+  const dateData = getRadarDataByDate(dateValue);
+  return dateData;
 };
 
 export const getSpeciesPerformance = (modelName: string) => {

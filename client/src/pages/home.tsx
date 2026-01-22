@@ -1,20 +1,18 @@
 import { BenchmarkBarChart } from "@/components/charts/BenchmarkBarChart";
 import { SpeciesPerformanceChart } from "@/components/charts/SpeciesPerformanceChart";
 import { HarmRadarChart } from "@/components/charts/HarmRadarChart";
-import { DimensionBarChart } from "@/components/charts/DimensionBarChart";
+import { DimensionHeatmap } from "@/components/charts/DimensionHeatmap";
 import { TimelineScatterPlot } from "@/components/charts/TimelineScatterPlot";
-import { Calendar } from "@/components/ui/calendar";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CalendarIcon, ExternalLink } from "lucide-react";
-import { format } from "date-fns";
 import { useState } from "react";
-import { studies } from "@/data/mock";
+import { studies, availableDates } from "@/data/mock";
 
 export default function Home() {
-  const [date, setDate] = useState<Date | undefined>(new Date());
+  const [selectedDate, setSelectedDate] = useState(availableDates[0].value);
 
   return (
     <div className="min-h-screen bg-background p-6 md:p-8 font-sans">
@@ -57,31 +55,25 @@ export default function Home() {
                 
                 <div className="flex items-center gap-2">
                    <span className="text-sm text-muted-foreground mr-2">Historical View:</span>
-                   <Popover>
-                    <PopoverTrigger asChild>
-                      <Button
-                        variant={"outline"}
-                        className={`w-[240px] justify-start text-left font-normal ${!date && "text-muted-foreground"}`}
-                      >
-                        <CalendarIcon className="mr-2 h-4 w-4" />
-                        {date ? format(date, "PPP") : <span>Pick a date</span>}
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="end">
-                      <Calendar
-                        mode="single"
-                        selected={date}
-                        onSelect={setDate}
-                        initialFocus
-                      />
-                    </PopoverContent>
-                  </Popover>
+                   <Select value={selectedDate} onValueChange={setSelectedDate}>
+                    <SelectTrigger className="w-[180px]">
+                      <CalendarIcon className="mr-2 h-4 w-4" />
+                      <SelectValue placeholder="Select date" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {availableDates.map((d) => (
+                        <SelectItem key={d.value} value={d.value}>
+                          {d.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
               </div>
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:h-[500px]">
-                <HarmRadarChart />
-                <DimensionBarChart />
+                <HarmRadarChart selectedDate={selectedDate} />
+                <DimensionHeatmap selectedDate={selectedDate} />
               </div>
             </section>
 

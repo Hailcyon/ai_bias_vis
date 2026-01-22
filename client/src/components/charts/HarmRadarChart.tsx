@@ -1,14 +1,13 @@
-import { useState } from "react";
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer, Legend, Tooltip } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { models, radarData } from "@/data/mock";
+import { models, getRadarDataByDate } from "@/data/mock";
 
-export function HarmRadarChart() {
-  const [activeModels, setActiveModels] = useState(models.map(m => m.name));
+interface HarmRadarChartProps {
+  selectedDate: string;
+}
 
-  const handleLegendClick = (e: any) => {
-    // Basic toggle logic could go here, for now just static display
-  };
+export function HarmRadarChart({ selectedDate }: HarmRadarChartProps) {
+  const radarData = getRadarDataByDate(selectedDate);
 
   return (
     <Card className="h-full border-border/50 bg-card/50 backdrop-blur-sm">
