@@ -1,13 +1,34 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { models, getSpeciesPerformance } from "@/data/mock";
 
+// Cyan (chart-1) to Yellow (chart-5) gradient based on score
+// chart-1: hsl(196, 100%, 50%) → rgb(0, 191, 255)
+// chart-5: hsl(45, 90%, 60%) → rgb(245, 199, 51)
+const getScoreColor = (score: number, minScore: number, maxScore: number): string => {
+  const range = maxScore - minScore || 1;
+  const normalized = (score - minScore) / range;
+
+  const r = Math.round(245 + (0 - 245) * normalized);
+  const g = Math.round(199 + (191 - 199) * normalized);
+  const b = Math.round(51 + (255 - 51) * normalized);
+
+  return `rgb(${r}, ${g}, ${b})`;
+};
+
 export function SpeciesPerformanceChart() {
   const [selectedModel, setSelectedModel] = useState(models[0].name);
-  const data = getSpeciesPerformance(selectedModel);
-  const modelColor = models.find(m => m.name === selectedModel)?.color || "var(--color-chart-1)";
+  const rawData = getSpeciesPerformance(selectedModel);
+
+  // Sort by score descending
+  const data = useMemo(() => {
+    return [...rawData].sort((a, b) => b.score - a.score);
+  }, [rawData]);
+
+  const minScore = Math.min(...data.map(d => d.score));
+  const maxScore = Math.max(...data.map(d => d.score));
 
   return (
     <Card className="w-full h-full border-border/50 bg-card/50 backdrop-blur-sm">
@@ -53,7 +74,11 @@ export function SpeciesPerformanceChart() {
                   color: 'hsl(var(--popover-foreground))'
                 }}
               />
-              <Bar dataKey="score" fill={modelColor} radius={[0, 4, 4, 0]} barSize={20} />
+              <Bar dataKey="score" radius={[0, 4, 4, 0]} barSize={20}>
+                {data.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={getScoreColor(entry.score, minScore, maxScore)} />
+                ))}
+              </Bar>
             </BarChart>
           </ResponsiveContainer>
         </div>

@@ -2,15 +2,44 @@ import { useState } from "react";
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { dimensions, getDimensionData } from "@/data/mock";
+import { dimensions, models, getRadarDataByDate } from "@/data/mock";
 
-export function DimensionBarChart() {
+interface DimensionBarChartProps {
+  selectedDate: string;
+}
+
+// Cyan (chart-1) to Purple (chart-2) gradient based on score
+// chart-1: hsl(196, 100%, 50%) → rgb(0, 191, 255)
+// chart-2: hsl(265, 89%, 66%) → rgb(149, 97, 226)
+const getScoreColor = (score: number, minScore: number, maxScore: number): string => {
+  const range = maxScore - minScore || 1;
+  const normalized = (score - minScore) / range;
+
+  const r = Math.round(149 + (0 - 149) * normalized);
+  const g = Math.round(97 + (191 - 97) * normalized);
+  const b = Math.round(226 + (255 - 226) * normalized);
+
+  return `rgb(${r}, ${g}, ${b})`;
+};
+
+export function DimensionBarChart({ selectedDate }: DimensionBarChartProps) {
   const [selectedDimension, setSelectedDimension] = useState(dimensions[0]);
-  const data = getDimensionData(selectedDimension);
+  const radarData = getRadarDataByDate(selectedDate);
+  const dimData = radarData.find(d => d.subject === selectedDimension);
+
+  const data = dimData
+    ? models.map(m => ({
+        name: m.name,
+        score: dimData[m.name as keyof typeof dimData] as number,
+      })).sort((a, b) => b.score - a.score)
+    : [];
+
+  const minScore = Math.min(...data.map(d => d.score));
+  const maxScore = Math.max(...data.map(d => d.score));
 
   return (
-    <Card className="h-full border-border/50 bg-card/50 backdrop-blur-sm">
-      <CardHeader className="flex flex-col space-y-4 pb-2">
+    <Card className="border-border/50 bg-card/50 backdrop-blur-sm">
+      <CardHeader className="flex flex-col space-y-3 pb-2">
         <div className="space-y-1">
           <CardTitle>Dimension Breakdown</CardTitle>
           <CardDescription>Compare performance on specific metrics</CardDescription>
@@ -28,8 +57,8 @@ export function DimensionBarChart() {
           </SelectContent>
         </Select>
       </CardHeader>
-      <CardContent>
-        <div className="h-[380px] w-full mt-4">
+      <CardContent className="pb-4">
+        <div className="h-[280px] w-full">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart 
               layout="vertical" 
@@ -65,7 +94,7 @@ export function DimensionBarChart() {
               />
               <Bar dataKey="score" radius={[0, 4, 4, 0]} barSize={32}>
                 {data.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={entry.fill} />
+                  <Cell key={`cell-${index}`} fill={getScoreColor(entry.score, minScore, maxScore)} />
                 ))}
               </Bar>
             </BarChart>

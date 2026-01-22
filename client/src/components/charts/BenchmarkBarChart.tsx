@@ -1,12 +1,34 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { benchmarks, getBenchmarkData } from "@/data/mock";
 
+// Purple (chart-2) to Pink (chart-4) gradient based on score
+// chart-2: hsl(265, 89%, 66%) → rgb(149, 97, 226)
+// chart-4: hsl(330, 85%, 60%) → rgb(230, 57, 127)
+const getScoreColor = (score: number, minScore: number, maxScore: number): string => {
+  const range = maxScore - minScore || 1;
+  const normalized = (score - minScore) / range;
+
+  const r = Math.round(230 + (149 - 230) * normalized);
+  const g = Math.round(57 + (97 - 57) * normalized);
+  const b = Math.round(127 + (226 - 127) * normalized);
+
+  return `rgb(${r}, ${g}, ${b})`;
+};
+
 export function BenchmarkBarChart() {
   const [selectedBenchmark, setSelectedBenchmark] = useState(benchmarks[0]);
-  const data = getBenchmarkData(selectedBenchmark);
+  const rawData = getBenchmarkData(selectedBenchmark);
+
+  // Sort by score descending and memoize
+  const data = useMemo(() => {
+    return [...rawData].sort((a, b) => b.score - a.score);
+  }, [rawData]);
+
+  const minScore = Math.min(...data.map(d => d.score));
+  const maxScore = Math.max(...data.map(d => d.score));
 
   return (
     <Card className="w-full h-full border-border/50 bg-card/50 backdrop-blur-sm">
@@ -59,7 +81,7 @@ export function BenchmarkBarChart() {
               />
               <Bar dataKey="score" radius={[4, 4, 0, 0]} barSize={50}>
                 {data.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={entry.fill} />
+                  <Cell key={`cell-${index}`} fill={getScoreColor(entry.score, minScore, maxScore)} />
                 ))}
               </Bar>
             </BarChart>
