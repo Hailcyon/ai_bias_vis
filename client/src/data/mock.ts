@@ -102,30 +102,36 @@ export const availableDates = [
   { label: "December 2024", value: "2024-12" },
 ];
 
-// Generate consistent data based on date seed
+// Generate consistent data based on date seed with high variability
 const generateDateBasedData = (dateSeed: string) => {
   // Use date string to create a deterministic "random" offset
   const seedNum = dateSeed.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
 
   // Base scores that improve over time (2024 -> 2025 -> 2026)
-  const yearMultiplier = dateSeed.startsWith('2026') ? 1.15 : dateSeed.startsWith('2025') ? 1.0 : 0.85;
+  const yearMultiplier = dateSeed.startsWith('2026') ? 1.0 : dateSeed.startsWith('2025') ? 0.85 : 0.7;
+
+  // Create varied base scores per dimension - some dimensions are harder than others
+  const dimensionDifficulty = [0.95, 0.7, 1.0, 0.6, 0.8, 0.5, 0.75, 0.85, 0.65, 0.9, 0.55, 0.72, 0.88];
 
   return dimensions.map((dim, dimIndex) => {
+    const difficulty = dimensionDifficulty[dimIndex % dimensionDifficulty.length];
+
+    // More varied base scores with bigger gaps between models
     const baseScores = {
-      "GPT-4o": 75 + (dimIndex % 5) * 3,
-      "Claude 3.5 Sonnet": 72 + ((dimIndex + 1) % 5) * 3,
-      "Gemini 1.5 Pro": 68 + ((dimIndex + 2) % 5) * 3,
-      "Llama 3 70B": 58 + ((dimIndex + 3) % 5) * 4,
-      "Mistral Large": 52 + ((dimIndex + 4) % 5) * 4,
+      "GPT-4o": 85 * difficulty + ((seedNum + dimIndex * 7) % 15),
+      "Claude 3.5 Sonnet": 80 * difficulty + ((seedNum + dimIndex * 11) % 18),
+      "Gemini 1.5 Pro": 70 * difficulty + ((seedNum + dimIndex * 13) % 20),
+      "Llama 3 70B": 55 * difficulty + ((seedNum + dimIndex * 17) % 25),
+      "Mistral Large": 40 * difficulty + ((seedNum + dimIndex * 19) % 30),
     };
 
     return {
       subject: dim,
-      "GPT-4o": Math.min(100, Math.floor(baseScores["GPT-4o"] * yearMultiplier + ((seedNum + dimIndex) % 10))),
-      "Claude 3.5 Sonnet": Math.min(100, Math.floor(baseScores["Claude 3.5 Sonnet"] * yearMultiplier + ((seedNum + dimIndex + 1) % 10))),
-      "Gemini 1.5 Pro": Math.min(100, Math.floor(baseScores["Gemini 1.5 Pro"] * yearMultiplier + ((seedNum + dimIndex + 2) % 10))),
-      "Llama 3 70B": Math.min(100, Math.floor(baseScores["Llama 3 70B"] * yearMultiplier + ((seedNum + dimIndex + 3) % 10))),
-      "Mistral Large": Math.min(100, Math.floor(baseScores["Mistral Large"] * yearMultiplier + ((seedNum + dimIndex + 4) % 10))),
+      "GPT-4o": Math.min(100, Math.max(20, Math.floor(baseScores["GPT-4o"] * yearMultiplier))),
+      "Claude 3.5 Sonnet": Math.min(100, Math.max(15, Math.floor(baseScores["Claude 3.5 Sonnet"] * yearMultiplier))),
+      "Gemini 1.5 Pro": Math.min(100, Math.max(10, Math.floor(baseScores["Gemini 1.5 Pro"] * yearMultiplier))),
+      "Llama 3 70B": Math.min(100, Math.max(5, Math.floor(baseScores["Llama 3 70B"] * yearMultiplier))),
+      "Mistral Large": Math.min(100, Math.max(0, Math.floor(baseScores["Mistral Large"] * yearMultiplier))),
       fullMark: 100,
     };
   });

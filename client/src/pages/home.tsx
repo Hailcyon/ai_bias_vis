@@ -74,12 +74,12 @@ export default function Home() {
 
               <div className="flex flex-col lg:flex-row gap-6">
                 {/* Left column: Radar + Bar Chart stacked */}
-                <div className="flex flex-col gap-6 lg:w-1/2">
+                <div className="flex flex-col gap-6 lg:w-1/2 shrink-0">
                   <HarmRadarChart selectedDate={selectedDate} />
                   <DimensionBarChart selectedDate={selectedDate} />
                 </div>
-                {/* Right column: Heatmap - natural width */}
-                <div className="lg:w-auto shrink-0">
+                {/* Right column: Heatmap - half page width */}
+                <div className="lg:w-1/2">
                   <DimensionHeatmap selectedDate={selectedDate} />
                 </div>
               </div>

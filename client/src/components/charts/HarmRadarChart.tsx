@@ -11,14 +11,14 @@ export function HarmRadarChart({ selectedDate }: HarmRadarChartProps) {
 
   return (
     <Card className="border-border/50 bg-card/50 backdrop-blur-sm">
-      <CardHeader className="pb-2">
+      <CardHeader className="pb-0">
         <CardTitle>Multidimensional Analysis</CardTitle>
         <CardDescription>Animal Harm Benchmark 2.0 Dimensions</CardDescription>
       </CardHeader>
-      <CardContent className="pb-4">
-        <div className="h-[380px] w-full">
+      <CardContent className="pb-2 pt-0">
+        <div className="h-[420px] w-full">
           <ResponsiveContainer width="100%" height="100%">
-            <RadarChart cx="50%" cy="50%" outerRadius="65%" data={radarData}>
+            <RadarChart cx="50%" cy="48%" outerRadius="75%" data={radarData}>
               <PolarGrid stroke="hsl(var(--muted-foreground))" opacity={0.2} />
               <PolarAngleAxis 
                 dataKey="subject" 

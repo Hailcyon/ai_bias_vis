@@ -36,35 +36,41 @@ export function DimensionHeatmap({ selectedDate }: DimensionHeatmapProps) {
   });
 
   return (
-    <Card className="border-border/50 bg-card/50 backdrop-blur-sm overflow-hidden w-fit">
+    <Card className="border-border/50 bg-card/50 backdrop-blur-sm overflow-hidden">
       <CardHeader className="pb-2">
         <CardTitle>Dimension Breakdown</CardTitle>
         <CardDescription>Performance heatmap across all dimensions</CardDescription>
       </CardHeader>
-      <CardContent className="p-0 pb-2">
-        <table className="text-sm border-collapse">
+      <CardContent className="px-3 pb-3">
+        <table className="w-full text-sm border-collapse table-fixed">
+          <colgroup>
+            <col className="w-[35%]" />
+            {models.map(model => (
+              <col key={model.id} className="w-[13%]" />
+            ))}
+          </colgroup>
           <thead>
             <tr className="border-b border-border/30">
-              <th className="text-left py-1.5 px-2 font-medium text-muted-foreground text-xs">
+              <th className="text-left py-2 px-2 font-medium text-muted-foreground text-xs">
                 Dimension
               </th>
               {models.map(model => (
-                <th key={model.id} className="py-1.5 px-0.5 font-medium text-muted-foreground text-center">
-                  <span className="text-[10px] leading-tight block w-11">{model.name}</span>
+                <th key={model.id} className="py-2 px-1 font-medium text-muted-foreground text-center">
+                  <span className="text-[11px] leading-tight block">{model.name}</span>
                 </th>
               ))}
             </tr>
           </thead>
           <tbody>
-            {/* Weighted score row */}
-            <tr className="border-b-2 border-border/50 bg-muted/20">
-              <td className="py-1.5 px-2 font-semibold text-xs">
+            {/* Weighted score row - highlighted */}
+            <tr className="border-b-2 border-chart-1/30 bg-gradient-to-r from-muted/30 to-muted/10">
+              <td className="py-3 px-2 font-bold text-sm text-foreground">
                 Weighted Score
               </td>
               {modelScores.map((model, idx) => (
-                <td key={idx} className="py-0.5 px-0.5 text-center">
+                <td key={idx} className="py-2 px-1.5 text-center">
                   <div
-                    className={`w-11 py-1 rounded text-[10px] ${getTextColor(model.score)}`}
+                    className={`py-2.5 rounded-md text-sm shadow-sm border border-black/10 ${getTextColor(model.score)}`}
                     style={{ backgroundColor: getScoreColor(model.score) }}
                   >
                     {model.score}%
@@ -76,15 +82,15 @@ export function DimensionHeatmap({ selectedDate }: DimensionHeatmapProps) {
             {/* Dimension rows */}
             {data.map((row, rowIdx) => (
               <tr key={rowIdx} className="border-b border-border/10 hover:bg-muted/10 transition-colors">
-                <td className="py-0.5 px-2 text-muted-foreground text-[11px] max-w-[140px] truncate">
+                <td className="py-1.5 px-2 text-muted-foreground text-xs">
                   {row.subject}
                 </td>
                 {models.map((model, colIdx) => {
                   const score = row[model.name as keyof typeof row] as number;
                   return (
-                    <td key={colIdx} className="py-0.5 px-0.5 text-center">
+                    <td key={colIdx} className="py-1.5 px-1.5 text-center">
                       <div
-                        className={`w-11 py-0.5 rounded text-[10px] ${getTextColor(score)}`}
+                        className={`py-1.5 rounded text-xs ${getTextColor(score)}`}
                         style={{ backgroundColor: getScoreColor(score) }}
                       >
                         {score}%
