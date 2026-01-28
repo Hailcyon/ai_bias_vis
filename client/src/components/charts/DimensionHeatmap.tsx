@@ -5,17 +5,35 @@ interface DimensionHeatmapProps {
   selectedDate: string;
 }
 
-// Get color based on score using chart-3 (green) for high and chart-5 (yellow) for low
-// chart-3: hsl(155, 85%, 55%) → rgb(33, 222, 134)
-// chart-5: hsl(45, 90%, 60%) → rgb(245, 199, 51)
+// Get color based on score: red (0-30%) → yellow (50%) → green (100%)
 const getScoreColor = (score: number): string => {
-  // Normalize score to 0-1 range
-  const normalized = score / 100;
+  // Define color stops
+  const red = { r: 153, g: 27, b: 27 };     // Darker red at 0%
+  const yellow = { r: 234, g: 179, b: 8 };  // Yellow at 50%
+  const green = { r: 22, g: 163, b: 74 };   // Green at 100%
 
-  // Interpolate between yellow (0) and green (100)
-  const r = Math.round(245 + (33 - 245) * normalized);
-  const g = Math.round(199 + (222 - 199) * normalized);
-  const b = Math.round(51 + (134 - 51) * normalized);
+  let r, g, b;
+
+  if (score <= 30) {
+    // Stay mostly red from 0-30%
+    const t = score / 30;
+    // Only slight transition toward yellow
+    r = Math.round(red.r + (red.r + 30 - red.r) * t);
+    g = Math.round(red.g + (red.g + 40 - red.g) * t);
+    b = Math.round(red.b);
+  } else if (score <= 50) {
+    // Transition from red to yellow (30-50%)
+    const t = (score - 30) / 20;
+    r = Math.round(183 + (yellow.r - 183) * t);
+    g = Math.round(67 + (yellow.g - 67) * t);
+    b = Math.round(27 + (yellow.b - 27) * t);
+  } else {
+    // Interpolate from yellow to green (50-100%)
+    const t = (score - 50) / 50;
+    r = Math.round(yellow.r + (green.r - yellow.r) * t);
+    g = Math.round(yellow.g + (green.g - yellow.g) * t);
+    b = Math.round(yellow.b + (green.b - yellow.b) * t);
+  }
 
   return `rgb(${r}, ${g}, ${b})`;
 };
