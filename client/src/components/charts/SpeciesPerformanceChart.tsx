@@ -4,16 +4,16 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { models, getSpeciesPerformance } from "@/data/mock";
 
-// Cyan (chart-1) to Yellow (chart-5) gradient based on score
-// chart-1: hsl(196, 100%, 50%) → rgb(0, 191, 255)
-// chart-5: hsl(45, 90%, 60%) → rgb(245, 199, 51)
+// Topaz (chart-5) to Emerald (chart-1) gradient based on score - Jewel Tones
+// Low scores: Topaz/Amber #F39C12 → rgb(243, 156, 18)
+// High scores: Emerald #1ABC9C → rgb(26, 188, 156)
 const getScoreColor = (score: number, minScore: number, maxScore: number): string => {
   const range = maxScore - minScore || 1;
   const normalized = (score - minScore) / range;
 
-  const r = Math.round(245 + (0 - 245) * normalized);
-  const g = Math.round(199 + (191 - 199) * normalized);
-  const b = Math.round(51 + (255 - 51) * normalized);
+  const r = Math.round(243 + (26 - 243) * normalized);
+  const g = Math.round(156 + (188 - 156) * normalized);
+  const b = Math.round(18 + (156 - 18) * normalized);
 
   return `rgb(${r}, ${g}, ${b})`;
 };

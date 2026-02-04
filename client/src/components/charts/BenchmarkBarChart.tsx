@@ -4,16 +4,16 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { benchmarks, getBenchmarkData } from "@/data/mock";
 
-// Purple (chart-2) to Pink (chart-4) gradient based on score
-// chart-2: hsl(265, 89%, 66%) → rgb(149, 97, 226)
-// chart-4: hsl(330, 85%, 60%) → rgb(230, 57, 127)
+// Ruby (chart-4) to Amethyst (chart-2) gradient based on score - Jewel Tones
+// Low scores: Ruby #E74C3C → rgb(231, 76, 60)
+// High scores: Amethyst #9B59B6 → rgb(155, 89, 182)
 const getScoreColor = (score: number, minScore: number, maxScore: number): string => {
   const range = maxScore - minScore || 1;
   const normalized = (score - minScore) / range;
 
-  const r = Math.round(230 + (149 - 230) * normalized);
-  const g = Math.round(57 + (97 - 57) * normalized);
-  const b = Math.round(127 + (226 - 127) * normalized);
+  const r = Math.round(231 + (155 - 231) * normalized);
+  const g = Math.round(76 + (89 - 76) * normalized);
+  const b = Math.round(60 + (182 - 60) * normalized);
 
   return `rgb(${r}, ${g}, ${b})`;
 };

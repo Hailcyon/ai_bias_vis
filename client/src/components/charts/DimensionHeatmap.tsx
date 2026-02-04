@@ -5,34 +5,34 @@ interface DimensionHeatmapProps {
   selectedDate: string;
 }
 
-// Get color based on score: red (0-30%) → yellow (50%) → green (100%)
+// Get color based on score: red (0-30%) → gold (50%) → green (100%) - Warmer earth tones
 const getScoreColor = (score: number): string => {
-  // Define color stops
-  const red = { r: 153, g: 27, b: 27 };     // Darker red at 0%
-  const yellow = { r: 234, g: 179, b: 8 };  // Yellow at 50%
-  const green = { r: 22, g: 163, b: 74 };   // Green at 100%
+  // Define color stops - warmer tones to match earth theme
+  const red = { r: 192, g: 57, b: 43 };     // Brick red #C0392B at 0%
+  const gold = { r: 241, g: 196, b: 15 };   // Golden yellow #F1C40F at 50%
+  const green = { r: 39, g: 174, b: 96 };   // Warm green #27AE60 at 100%
 
   let r, g, b;
 
   if (score <= 30) {
     // Stay mostly red from 0-30%
     const t = score / 30;
-    // Only slight transition toward yellow
-    r = Math.round(red.r + (red.r + 30 - red.r) * t);
+    // Only slight transition toward gold
+    r = Math.round(red.r + (red.r + 20 - red.r) * t);
     g = Math.round(red.g + (red.g + 40 - red.g) * t);
     b = Math.round(red.b);
   } else if (score <= 50) {
-    // Transition from red to yellow (30-50%)
+    // Transition from red to gold (30-50%)
     const t = (score - 30) / 20;
-    r = Math.round(183 + (yellow.r - 183) * t);
-    g = Math.round(67 + (yellow.g - 67) * t);
-    b = Math.round(27 + (yellow.b - 27) * t);
+    r = Math.round(212 + (gold.r - 212) * t);
+    g = Math.round(97 + (gold.g - 97) * t);
+    b = Math.round(43 + (gold.b - 43) * t);
   } else {
-    // Interpolate from yellow to green (50-100%)
+    // Interpolate from gold to green (50-100%)
     const t = (score - 50) / 50;
-    r = Math.round(yellow.r + (green.r - yellow.r) * t);
-    g = Math.round(yellow.g + (green.g - yellow.g) * t);
-    b = Math.round(yellow.b + (green.b - yellow.b) * t);
+    r = Math.round(gold.r + (green.r - gold.r) * t);
+    g = Math.round(gold.g + (green.g - gold.g) * t);
+    b = Math.round(gold.b + (green.b - gold.b) * t);
   }
 
   return `rgb(${r}, ${g}, ${b})`;

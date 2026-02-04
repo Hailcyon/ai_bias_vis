@@ -21,11 +21,7 @@ export default function Home() {
         
         {/* Header */}
         <header className="mb-10 border-b border-border/40 pb-6">
-          <div className="flex items-center gap-3 mb-2">
-            <div className="h-2 w-2 rounded-full bg-chart-1 animate-pulse"></div>
-            <span className="text-xs font-mono text-muted-foreground uppercase tracking-widest">Live Monitoring</span>
-          </div>
-          <h1 className="text-4xl md:text-5xl font-display font-bold bg-clip-text text-transparent bg-gradient-to-r from-foreground to-muted-foreground/50">
+          <h1 className="text-4xl md:text-5xl font-display font-bold bg-clip-text text-transparent bg-gradient-to-r from-foreground to-muted-foreground/50 pb-1">
             AI Speciesism Monitor
           </h1>
           <p className="text-muted-foreground mt-2 max-w-2xl text-lg">
@@ -118,7 +114,7 @@ export default function Home() {
         </Tabs>
 
         <footer className="pt-12 pb-6 text-center text-sm text-muted-foreground border-t border-border/40 mt-12">
-          <p>© 2026 AI Ethics Research Group. Data simulated for prototyping purposes.</p>
+          <p>Data simulated for prototyping purposes.</p>
         </footer>
       </div>
     </div>
