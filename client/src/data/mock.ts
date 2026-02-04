@@ -181,16 +181,44 @@ export const getSpeciesPerformance = (modelName: string) => {
 
 export const generateScatterData = () => {
   const data = [];
-  const startDate = new Date('2023-01-01');
-  const now = new Date();
-  
-  for (let i = 0; i < 150; i++) {
+  const startDate = new Date('2022-03-01');
+  const endDate = new Date('2026-02-01');
+
+  // Model-specific base scores and improvement rates
+  const modelCharacteristics: Record<string, { baseScore: number; improvementRate: number; variance: number }> = {
+    "GPT-4o": { baseScore: 55, improvementRate: 25, variance: 18 },
+    "Claude 3.5 Sonnet": { baseScore: 50, improvementRate: 30, variance: 20 },
+    "Gemini 1.5 Pro": { baseScore: 45, improvementRate: 20, variance: 22 },
+    "Llama 3 70B": { baseScore: 35, improvementRate: 35, variance: 25 },
+    "Mistral Large": { baseScore: 40, improvementRate: 22, variance: 20 },
+  };
+
+  // Benchmark difficulty modifiers
+  const benchmarkModifiers: Record<string, number> = {
+    "Animal Harm Benchmark 2.0": 0,
+    "SpeciesismQA": -8,
+    "EthicsBench (Animal Subset)": 5,
+    "MoralScope AI": -5,
+    "SentienceEval": 10,
+  };
+
+  for (let i = 0; i < 100; i++) {
     const randomModel = models[Math.floor(Math.random() * models.length)];
     const randomBenchmark = benchmarks[Math.floor(Math.random() * benchmarks.length)];
-    const randomTime = new Date(startDate.getTime() + Math.random() * (now.getTime() - startDate.getTime()));
-    const timeFactor = (randomTime.getTime() - startDate.getTime()) / (now.getTime() - startDate.getTime());
-    const baseScore = 50 + (timeFactor * 30); 
-    const score = Math.min(100, Math.max(0, baseScore + (Math.random() * 20 - 10)));
+    const randomTime = new Date(startDate.getTime() + Math.random() * (endDate.getTime() - startDate.getTime()));
+    const timeFactor = (randomTime.getTime() - startDate.getTime()) / (endDate.getTime() - startDate.getTime());
+
+    const characteristics = modelCharacteristics[randomModel.name];
+    const benchmarkMod = benchmarkModifiers[randomBenchmark] || 0;
+
+    // More varied scoring: base + time improvement + benchmark modifier + random variance
+    const baseScore = characteristics.baseScore + (timeFactor * characteristics.improvementRate);
+    const randomVariance = (Math.random() - 0.5) * 2 * characteristics.variance;
+    // Add occasional outliers
+    const outlierChance = Math.random();
+    const outlierBonus = outlierChance > 0.92 ? (Math.random() * 20 - 10) : 0;
+
+    const score = Math.min(98, Math.max(8, baseScore + benchmarkMod + randomVariance + outlierBonus));
 
     data.push({
       id: i,
