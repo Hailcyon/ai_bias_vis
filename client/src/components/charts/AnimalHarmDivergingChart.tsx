@@ -17,6 +17,46 @@ export function AnimalHarmDivergingChart({ type }: AnimalHarmDivergingChartProps
     ? 'Kanepajs et al. (2025): Scores show risk of harm in LLM responses. Positive scores indicate decreased risk, negative scores indicate increased risk.'
     : 'Kanepajs et al. (2025): Comparative performance across frontier LLMs. Higher scores indicate better animal welfare considerations.';
 
+  // Custom tick component for wrapped text
+  const CustomTick = ({ x, y, payload }: any) => {
+    // Split on both spaces and dashes, but keep the dash with the preceding word
+    const parts = payload.value.split(/(\s+|-)/);
+    const maxWidth = 50; // reduced max width for more aggressive wrapping
+    const lines: string[] = [];
+    let currentLine = '';
+
+    parts.forEach((part: string) => {
+      if (!part || part.match(/^\s+$/)) return; // skip empty or whitespace-only parts
+
+      const testLine = currentLine ? `${currentLine}${part}` : part;
+      if (testLine.length * 7 > maxWidth && currentLine) {
+        lines.push(currentLine);
+        currentLine = part;
+      } else {
+        currentLine = testLine;
+      }
+    });
+    if (currentLine) lines.push(currentLine);
+
+    return (
+      <g transform={`translate(${x},${y})`}>
+        {lines.map((line, index) => (
+          <text
+            key={index}
+            x={0}
+            y={0}
+            dy={16 + index * 14}
+            textAnchor="middle"
+            fill="hsl(var(--muted-foreground))"
+            fontSize={14}
+          >
+            {line}
+          </text>
+        ))}
+      </g>
+    );
+  };
+
   // Custom tooltip
   const CustomTooltip = ({ active, payload }: any) => {
     if (active && payload && payload.length) {
@@ -56,13 +96,14 @@ export function AnimalHarmDivergingChart({ type }: AnimalHarmDivergingChartProps
               dataKey="name"
               stroke="hsl(var(--muted-foreground))"
               fontSize={type === 'species' ? 11 : 14}
-              angle={-90}
-              textAnchor="end"
+              angle={type === 'species' ? -90 : 0}
+              textAnchor={type === 'species' ? 'end' : 'middle'}
               height={type === 'species' ? 85 : 90}
               interval={0}
               tickLine={false}
               axisLine={false}
               dy={0}
+              tick={type === 'model' ? <CustomTick /> : undefined}
             />
             <YAxis
               type="number"
