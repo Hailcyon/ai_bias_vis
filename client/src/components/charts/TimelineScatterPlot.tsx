@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import { ScatterChart, Scatter, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -8,16 +8,44 @@ import { format } from "date-fns";
 export function TimelineScatterPlot() {
   const [filterModel, setFilterModel] = useState<string>("all");
   const [filterBenchmark, setFilterBenchmark] = useState<string>("all");
-  
+
   const rawData = useMemo(() => generateScatterData(), []);
 
-  const filteredData = useMemo(() => {
+  // Calculate stable domain from all data to prevent grid flickering
+  const xDomain = useMemo(() => {
+    if (rawData.length === 0) return [0, Date.now()];
+    const xValues = rawData.map(d => d.x);
+    return [Math.min(...xValues), Math.max(...xValues)];
+  }, [rawData]);
+
+  const actualFilteredData = useMemo(() => {
     return rawData.filter(item => {
       if (filterModel !== "all" && item.model !== filterModel) return false;
       if (filterBenchmark !== "all" && item.benchmark !== filterBenchmark) return false;
       return true;
     });
   }, [filterModel, filterBenchmark, rawData]);
+
+  const [displayData, setDisplayData] = useState(actualFilteredData);
+  const prevFilterRef = useRef(`${filterModel}-${filterBenchmark}`);
+
+  useEffect(() => {
+    const currentFilter = `${filterModel}-${filterBenchmark}`;
+
+    // Only animate if the filter actually changed (not on initial mount)
+    if (prevFilterRef.current !== currentFilter) {
+      // Set to empty data first to trigger animation
+      setDisplayData([]);
+
+      // Then animate to actual values after a brief delay
+      const timer = setTimeout(() => {
+        setDisplayData(actualFilteredData);
+      }, 50);
+
+      prevFilterRef.current = currentFilter;
+      return () => clearTimeout(timer);
+    }
+  }, [filterModel, filterBenchmark, actualFilteredData]);
 
   return (
     <Card className="w-full border-border/50 bg-card/50 backdrop-blur-sm">
@@ -59,13 +87,13 @@ export function TimelineScatterPlot() {
           <ResponsiveContainer width="100%" height="100%">
             <ScatterChart margin={{ top: 20, right: 20, bottom: 20, left: 0 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--muted-foreground))" opacity={0.1} />
-              <XAxis 
-                type="number" 
-                dataKey="x" 
-                name="Date" 
-                domain={['auto', 'auto']}
+              <XAxis
+                type="number"
+                dataKey="x"
+                name="Date"
+                domain={xDomain}
                 tickFormatter={(unixTime) => format(new Date(unixTime), 'MMM yyyy')}
-                stroke="hsl(var(--muted-foreground))" 
+                stroke="hsl(var(--muted-foreground))"
                 tick={{ fontSize: 12 }}
                 tickLine={false}
                 axisLine={false}
@@ -104,11 +132,14 @@ export function TimelineScatterPlot() {
               />
               {/* If no filters, show generic scatter points, but better to group by model color if possible */}
               {models.map((model) => (
-                <Scatter 
+                <Scatter
                   key={model.id}
-                  name={model.name} 
-                  data={filteredData.filter(d => d.model === model.name)} 
+                  name={model.name}
+                  data={displayData.filter(d => d.model === model.name)}
                   fill={model.color}
+                  isAnimationActive={true}
+                  animationDuration={600}
+                  animationEasing="ease-out"
                 />
               ))}
             </ScatterChart>
