@@ -44,31 +44,34 @@ export function AnimalHarmDivergingChart({ type }: AnimalHarmDivergingChartProps
         <CardDescription>{description}</CardDescription>
       </CardHeader>
       <CardContent>
-        <ResponsiveContainer width="100%" height={type === 'species' ? 900 : 450}>
+        <ResponsiveContainer width="100%" height={400}>
           <BarChart
             data={data}
-            layout="vertical"
-            margin={{ top: 5, right: 30, left: type === 'species' ? 140 : 160, bottom: 5 }}
+            layout="horizontal"
+            margin={{ top: 5, right: 30, left: 50, bottom: type === 'species' ? 120 : 80 }}
           >
             <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" opacity={0.3} />
             <XAxis
+              type="category"
+              dataKey="name"
+              stroke="hsl(var(--foreground))"
+              fontSize={11}
+              angle={-90}
+              textAnchor="end"
+              height={type === 'species' ? 110 : 70}
+              interval={0}
+              tick={{ fill: 'hsl(var(--foreground))' }}
+            />
+            <YAxis
               type="number"
               domain={[-0.2, 0.5]}
               stroke="hsl(var(--foreground))"
               fontSize={13}
               tick={{ fill: 'hsl(var(--foreground))' }}
             />
-            <YAxis
-              type="category"
-              dataKey="name"
-              stroke="hsl(var(--foreground))"
-              fontSize={13}
-              width={type === 'species' ? 130 : 150}
-              tick={{ fill: 'hsl(var(--foreground))' }}
-            />
             <Tooltip content={<CustomTooltip />} />
-            <ReferenceLine x={0} stroke="var(--foreground)" strokeWidth={2} />
-            <Bar dataKey="score" radius={[0, 4, 4, 0]}>
+            <ReferenceLine y={0} stroke="var(--foreground)" strokeWidth={2} />
+            <Bar dataKey="score" radius={[4, 4, 0, 0]}>
               {data.map((entry, index) => (
                 <Cell
                   key={`cell-${index}`}

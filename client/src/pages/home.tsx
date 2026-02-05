@@ -95,7 +95,7 @@ export default function Home() {
                 <h2 className="text-2xl font-display font-medium">AnimalHarmBench 1.0</h2>
                 <p className="text-muted-foreground">Risk of animal harm in LLM-generated text across species and models</p>
               </div>
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <div className="space-y-6">
                 <AnimalHarmDivergingChart type="species" />
                 <AnimalHarmDivergingChart type="model" />
               </div>
