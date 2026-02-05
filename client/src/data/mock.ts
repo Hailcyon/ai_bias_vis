@@ -83,6 +83,12 @@ export const studies = [
     title: "Greenblatt et al. (2024) - Alignment Faking",
     description: "Investigating whether models fake alignment in animal welfare scenarios.",
     url: "https://arxiv.org/pdf/2412.14093"
+  },
+  {
+    year: "2025",
+    title: "Jotautaitė et al. (2025) - SpeciesismBench",
+    description: "1,003-item benchmark assessing recognition and moral evaluation of speciesist statements across 17 LLMs. Models averaged 86% recognition but only 34% condemnation.",
+    url: "https://arxiv.org/abs/2508.11534"
   }
 ];
 

@@ -3,6 +3,7 @@ import { SpeciesPerformanceChart } from "@/components/charts/SpeciesPerformanceC
 import { HarmRadarChart } from "@/components/charts/HarmRadarChart";
 import { DimensionBarChart } from "@/components/charts/DimensionBarChart";
 import { DimensionHeatmap } from "@/components/charts/DimensionHeatmap";
+import { SpeciesismBenchScatter } from "@/components/charts/SpeciesismBenchScatter";
 import { TimelineScatterPlot } from "@/components/charts/TimelineScatterPlot";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
@@ -81,7 +82,18 @@ export default function Home() {
               </div>
             </section>
 
-            {/* Section 3: Scatter Plot */}
+            {/* Section 3: SpeciesismBench Scatter Plot */}
+            <section className="space-y-4 pt-8">
+              <div>
+                <h2 className="text-2xl font-display font-medium">SpeciesismBench</h2>
+                <p className="text-muted-foreground mt-1">
+                  Recognition vs. moral evaluation of speciesist statements across leading AI models
+                </p>
+              </div>
+              <SpeciesismBenchScatter />
+            </section>
+
+            {/* Section 4: Timeline Scatter Plot */}
             <section className="space-y-4 pt-8">
               <h2 className="text-2xl font-display font-medium">Longitudinal Analysis</h2>
               <TimelineScatterPlot />
