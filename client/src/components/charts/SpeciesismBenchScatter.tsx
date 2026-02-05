@@ -94,7 +94,7 @@ export function SpeciesismBenchScatter() {
   }, [filteredData]);
 
   return (
-    <Card className="w-full border-border/50 bg-card/50 backdrop-blur-sm">
+    <Card className="max-w-3xl border-border/50 bg-card/50 backdrop-blur-sm">
       <CardHeader>
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="space-y-1">
@@ -135,7 +135,7 @@ export function SpeciesismBenchScatter() {
       <CardContent>
         <div className="h-[500px] w-full mt-4">
           <ResponsiveContainer width="100%" height="100%">
-            <ScatterChart margin={{ top: 50, right: 20, bottom: 50, left: 80 }}>
+            <ScatterChart margin={{ top: 30, right: 20, bottom: 50, left: 80 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--muted-foreground))" opacity={0.1} />
               <XAxis
                 type="number"
