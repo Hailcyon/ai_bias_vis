@@ -84,12 +84,7 @@ export default function Home() {
 
             {/* Section 3: SpeciesismBench Scatter Plot */}
             <section className="space-y-4 pt-8">
-              <div>
-                <h2 className="text-2xl font-display font-medium">SpeciesismBench</h2>
-                <p className="text-muted-foreground mt-1">
-                  Recognition vs. moral evaluation of speciesist statements across leading AI models
-                </p>
-              </div>
+              <h2 className="text-2xl font-display font-medium">SpeciesismBench</h2>
               <SpeciesismBenchScatter />
             </section>
 

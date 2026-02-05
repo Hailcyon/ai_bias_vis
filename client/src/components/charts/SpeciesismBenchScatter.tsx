@@ -98,13 +98,10 @@ export function SpeciesismBenchScatter() {
       <CardHeader>
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="space-y-1">
-            <CardTitle>SpeciesismBench</CardTitle>
+            <CardTitle>Recognition vs. Condemnation of Speciesist Statements</CardTitle>
             <CardDescription>
-              Recognition vs. Condemnation of Speciesist Statements (%)
-            </CardDescription>
-            <p className="text-xs text-muted-foreground mt-2">
               Models reliably detected speciesist statements but rarely condemned them as morally wrong.
-            </p>
+            </CardDescription>
           </div>
           <div className="flex gap-2 flex-wrap">
             <Select value={filterAnimalType} onValueChange={setFilterAnimalType}>
@@ -138,7 +135,7 @@ export function SpeciesismBenchScatter() {
       <CardContent>
         <div className="h-[500px] w-full mt-4">
           <ResponsiveContainer width="100%" height="100%">
-            <ScatterChart margin={{ top: 20, right: 20, bottom: 60, left: 60 }}>
+            <ScatterChart margin={{ top: 50, right: 20, bottom: 50, left: 80 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--muted-foreground))" opacity={0.1} />
               <XAxis
                 type="number"
@@ -153,8 +150,8 @@ export function SpeciesismBenchScatter() {
                 label={{
                   value: 'Recognition of Speciesism (%)',
                   position: 'bottom',
-                  offset: 40,
-                  style: { fontSize: 14, fill: 'hsl(var(--muted-foreground))' }
+                  offset: 0,
+                  style: { fontSize: 13, fill: 'hsl(var(--muted-foreground))' }
                 }}
               />
               <YAxis
@@ -202,8 +199,10 @@ export function SpeciesismBenchScatter() {
                 }}
               />
               <Legend
-                wrapperStyle={{ paddingTop: '20px' }}
+                verticalAlign="top"
+                height={36}
                 iconType="circle"
+                wrapperStyle={{ fontSize: '12px' }}
               />
               {Object.entries(groupedData).map(([family, data]) => (
                 <Scatter
