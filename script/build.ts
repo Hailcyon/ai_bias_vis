@@ -38,8 +38,8 @@ async function buildAll() {
   console.log("building client...");
   await viteBuild();
 
-  console.log("copying client to dist/public...");
-  await cp("docs", "dist/public", { recursive: true });
+  console.log("copying client to docs for GitHub Pages...");
+  await cp("dist/public", "docs", { recursive: true });
 
   console.log("building server...");
   const pkg = JSON.parse(await readFile("package.json", "utf-8"));
