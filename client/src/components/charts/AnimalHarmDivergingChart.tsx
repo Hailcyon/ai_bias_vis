@@ -43,22 +43,22 @@ export function AnimalHarmDivergingChart({ type }: AnimalHarmDivergingChartProps
         <CardTitle>{title}</CardTitle>
         <CardDescription>{description}</CardDescription>
       </CardHeader>
-      <CardContent>
-        <ResponsiveContainer width="100%" height={400}>
+      <CardContent className="pb-2">
+        <ResponsiveContainer width="100%" height={type === 'species' ? 400 : 500}>
           <BarChart
             data={data}
             layout="horizontal"
-            margin={{ top: 5, right: 30, left: 50, bottom: type === 'species' ? 120 : 80 }}
+            margin={{ top: 5, right: 20, left: 15, bottom: type === 'species' ? 20 : 70 }}
           >
             <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" opacity={0.3} />
             <XAxis
               type="category"
               dataKey="name"
               stroke="hsl(var(--foreground))"
-              fontSize={11}
+              fontSize={type === 'species' ? 11 : 14}
               angle={-90}
               textAnchor="end"
-              height={type === 'species' ? 110 : 70}
+              height={type === 'species' ? 85 : 90}
               interval={0}
               tick={{ fill: 'hsl(var(--foreground))' }}
             />
@@ -71,7 +71,7 @@ export function AnimalHarmDivergingChart({ type }: AnimalHarmDivergingChartProps
             />
             <Tooltip content={<CustomTooltip />} />
             <ReferenceLine y={0} stroke="var(--foreground)" strokeWidth={2} />
-            <Bar dataKey="score" radius={[4, 4, 0, 0]}>
+            <Bar dataKey="score" radius={[4, 4, 0, 0]} barSize={type === 'species' ? undefined : 50}>
               {data.map((entry, index) => (
                 <Cell
                   key={`cell-${index}`}
@@ -82,7 +82,7 @@ export function AnimalHarmDivergingChart({ type }: AnimalHarmDivergingChartProps
             </Bar>
           </BarChart>
         </ResponsiveContainer>
-        <div className="flex justify-center gap-6 mt-4 text-sm">
+        <div className="flex justify-center gap-6 mt-4 mb-4 text-sm">
           <div className="flex items-center gap-2">
             <div className="w-4 h-4 rounded" style={{ backgroundColor: 'var(--color-chart-3)', opacity: 0.8 }}></div>
             <span className="text-muted-foreground">Decreased Harm Risk</span>
