@@ -1,9 +1,9 @@
 export const benchmarks = [
-  "Animal Harm Benchmark 2.0",
-  "SpeciesismQA",
-  "EthicsBench (Animal Subset)",
-  "MoralScope AI",
-  "SentienceEval"
+  "AnimalHarmBench 2.0",
+  "AnimalHarmBench 1.0",
+  "AnimalHarmBench 2.1",
+  "SpeciesismBench",
+  "AnimaLLM"
 ];
 
 export const models = [
@@ -195,11 +195,11 @@ export const generateScatterData = () => {
 
   // Benchmark difficulty modifiers
   const benchmarkModifiers: Record<string, number> = {
-    "Animal Harm Benchmark 2.0": 0,
-    "SpeciesismQA": -8,
-    "EthicsBench (Animal Subset)": 5,
-    "MoralScope AI": -5,
-    "SentienceEval": 10,
+    "AnimalHarmBench 2.0": 0,
+    "AnimalHarmBench 1.0": -8,
+    "AnimalHarmBench 2.1": 5,
+    "SpeciesismBench": -5,
+    "AnimaLLM": 10,
   };
 
   for (let i = 0; i < 100; i++) {
