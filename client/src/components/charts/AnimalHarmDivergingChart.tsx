@@ -50,28 +50,31 @@ export function AnimalHarmDivergingChart({ type }: AnimalHarmDivergingChartProps
             layout="horizontal"
             margin={{ top: 5, right: 20, left: 15, bottom: type === 'species' ? 20 : 70 }}
           >
-            <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" opacity={0.3} />
+            <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--muted-foreground))" opacity={0.1} />
             <XAxis
               type="category"
               dataKey="name"
-              stroke="hsl(var(--foreground))"
+              stroke="hsl(var(--muted-foreground))"
               fontSize={type === 'species' ? 11 : 14}
               angle={-90}
               textAnchor="end"
               height={type === 'species' ? 85 : 90}
               interval={0}
-              tick={{ fill: 'hsl(var(--foreground))' }}
+              tickLine={false}
+              axisLine={false}
+              dy={0}
             />
             <YAxis
               type="number"
-              domain={[-0.2, 0.5]}
-              stroke="hsl(var(--foreground))"
+              domain={type === 'species' ? [-0.2, 0.5] : [-0.1, 0.2]}
+              stroke="hsl(var(--muted-foreground))"
               fontSize={13}
-              tick={{ fill: 'hsl(var(--foreground))' }}
+              tickLine={false}
+              axisLine={false}
             />
             <Tooltip content={<CustomTooltip />} />
-            <ReferenceLine y={0} stroke="var(--foreground)" strokeWidth={2} />
-            <Bar dataKey="score" radius={[4, 4, 0, 0]} barSize={type === 'species' ? undefined : 50}>
+            <ReferenceLine y={0} stroke="hsl(var(--muted-foreground))" strokeWidth={2} />
+            <Bar dataKey="score" radius={[4, 4, 0, 0]} barSize={type === 'species' ? undefined : undefined}>
               {data.map((entry, index) => (
                 <Cell
                   key={`cell-${index}`}
