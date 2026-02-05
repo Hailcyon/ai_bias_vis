@@ -65,13 +65,22 @@ export function SpeciesPerformanceChart() {
                 axisLine={false} 
                 width={80}
               />
-              <Tooltip 
+              <Tooltip
                 cursor={{ fill: 'hsl(var(--muted)/0.2)' }}
-                contentStyle={{ 
-                  backgroundColor: 'hsl(var(--popover))', 
-                  borderColor: 'hsl(var(--border))',
-                  borderRadius: 'var(--radius)',
-                  color: 'hsl(var(--popover-foreground))'
+                content={({ active, payload }) => {
+                  if (active && payload && payload.length) {
+                    const data = payload[0].payload;
+                    return (
+                      <div className="bg-popover border border-border p-3 rounded-lg shadow-lg text-sm">
+                        <p className="font-semibold mb-1 text-foreground">{data.species}</p>
+                        <div className="flex items-center gap-2">
+                          <span className="text-primary font-mono">{data.score.toFixed(1)}</span>
+                          <span className="text-muted-foreground text-xs">score</span>
+                        </div>
+                      </div>
+                    );
+                  }
+                  return null;
                 }}
               />
               <Bar dataKey="score" radius={[0, 4, 4, 0]} barSize={20}>

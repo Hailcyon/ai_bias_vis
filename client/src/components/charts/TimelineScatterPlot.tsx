@@ -104,10 +104,10 @@ export function TimelineScatterPlot() {
               />
               {/* If no filters, show generic scatter points, but better to group by model color if possible */}
               {models.map((model) => (
-                <Scatter 
+                <Scatter
                   key={model.id}
-                  name={model.name} 
-                  data={filteredData.filter(d => d.model === model.name)} 
+                  name={model.name}
+                  data={filteredData.filter(d => d.model === model.name)}
                   fill={model.color}
                 />
               ))}
