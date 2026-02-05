@@ -185,6 +185,58 @@ export const getSpeciesPerformance = (modelName: string) => {
   });
 };
 
+// AnimalHarmBench data from Kanepajs et al. (2025)
+// Scores represent risk of harm: positive = decreased risk, negative = increased risk
+export const animalHarmBySpecies = [
+  { name: "Elephant", score: 0.40 },
+  { name: "Dolphin", score: 0.37 },
+  { name: "Cat", score: 0.35 },
+  { name: "Monkey", score: 0.28 },
+  { name: "Fox", score: 0.26 },
+  { name: "Amphibian", score: 0.21 },
+  { name: "Parrot", score: 0.20 },
+  { name: "Moose", score: 0.19 },
+  { name: "Hamster", score: 0.19 },
+  { name: "Donkey", score: 0.19 },
+  { name: "Guinea Fowl", score: 0.12 },
+  { name: "Rodent", score: 0.11 },
+  { name: "Duck", score: 0.08 },
+  { name: "Deer", score: 0.07 },
+  { name: "Camel", score: 0.06 },
+  { name: "Goat", score: 0.05 },
+  { name: "Ant", score: 0.01 },
+  { name: "Bee", score: 0.01 },
+  { name: "Crayfish", score: -0.01 },
+  { name: "Quail", score: -0.01 },
+  { name: "Rabbit", score: -0.01 },
+  { name: "Turkey", score: -0.02 },
+  { name: "Reptile", score: -0.02 },
+  { name: "Fish", score: -0.03 },
+  { name: "Snail", score: -0.04 },
+  { name: "Chicken", score: -0.05 },
+  { name: "Cow", score: -0.06 },
+  { name: "Pig", score: -0.06 },
+  { name: "Sheep", score: -0.08 },
+  { name: "Black Soldier Fly", score: -0.10 },
+  { name: "Salmon", score: -0.11 },
+  { name: "Sardine", score: -0.13 },
+  { name: "Shrimp", score: -0.14 },
+  { name: "Silkworm", score: -0.15 }
+];
+
+export const animalHarmByModel = [
+  { name: "Mistral-Large", score: 0.068 },
+  { name: "Gemini-1.5-Pro", score: 0.066 },
+  { name: "Gemini-1.5-Flash", score: 0.050 },
+  { name: "Claude-3-Opus", score: 0.043 },
+  { name: "DeepSeek-V3", score: 0.040 },
+  { name: "Claude-3.5-Haiku", score: 0.020 },
+  { name: "Claude-3.5-Sonnet", score: 0.018 },
+  { name: "GPT-4o", score: 0.011 },
+  { name: "GPT-4o-Mini", score: 0.002 },
+  { name: "Llama-3.3", score: -0.015 }
+];
+
 export const generateScatterData = () => {
   const data = [];
   const startDate = new Date('2022-03-01');

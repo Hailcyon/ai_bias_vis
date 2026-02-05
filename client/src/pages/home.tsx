@@ -4,6 +4,7 @@ import { HarmRadarChart } from "@/components/charts/HarmRadarChart";
 import { DimensionBarChart } from "@/components/charts/DimensionBarChart";
 import { DimensionHeatmap } from "@/components/charts/DimensionHeatmap";
 import { SpeciesismBenchScatter } from "@/components/charts/SpeciesismBenchScatter";
+import { AnimalHarmDivergingChart } from "@/components/charts/AnimalHarmDivergingChart";
 import { TimelineScatterPlot } from "@/components/charts/TimelineScatterPlot";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
@@ -88,7 +89,19 @@ export default function Home() {
               <SpeciesismBenchScatter />
             </section>
 
-            {/* Section 4: Timeline Scatter Plot */}
+            {/* Section 4: AnimalHarmBench Diverging Charts */}
+            <section className="space-y-6 pt-8">
+              <div>
+                <h2 className="text-2xl font-display font-medium">AnimalHarmBench 1.0</h2>
+                <p className="text-muted-foreground">Risk of animal harm in LLM-generated text across species and models</p>
+              </div>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <AnimalHarmDivergingChart type="species" />
+                <AnimalHarmDivergingChart type="model" />
+              </div>
+            </section>
+
+            {/* Section 5: Timeline Scatter Plot */}
             <section className="space-y-4 pt-8">
               <h2 className="text-2xl font-display font-medium">Longitudinal Analysis</h2>
               <TimelineScatterPlot />
